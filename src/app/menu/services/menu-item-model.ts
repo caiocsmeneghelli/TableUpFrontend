@@ -6,3 +6,9 @@ export interface MenuItem {
   categoryGuid: string;
   categoryName: string;
 }
+
+export interface MenuCategory {
+  categoryGuid: string;
+  categoryName: string;
+  items: MenuItem[];
+}
