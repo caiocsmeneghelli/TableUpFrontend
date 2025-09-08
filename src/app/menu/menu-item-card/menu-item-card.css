@@ -1,0 +1,14 @@
+.item-card {
+  margin: 0.5rem;
+}
+
+.description {
+  color: var(--text-color-secondary);
+}
+
+.price-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+

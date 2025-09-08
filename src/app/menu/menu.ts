@@ -9,6 +9,8 @@ import { PanelModule } from 'primeng/panel';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { CategoryCardComponent } from './category-card/category-card';
+import { MenuItemCardComponent } from './menu-item-card/menu-item-card';
 
 @Component({
   selector: 'app-menu',
@@ -19,7 +21,9 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     PanelModule,
     TagModule,
     DividerModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    CategoryCardComponent,
+    MenuItemCardComponent
   ],
   templateUrl: './menu.html',
   styleUrls: ['./menu.css']

@@ -1,0 +1,19 @@
+<p-card styleClass="item-card">
+  <ng-template pTemplate="header">
+    <h3>{{ item.name }}</h3>
+  </ng-template>
+  
+  <ng-template pTemplate="content">
+    <p class="description">{{ item.description }}</p>
+    <p-divider></p-divider>
+    <div class="price-container">
+      <p-tag 
+        [value]="'R$ ' + item.price.toFixed(2)" 
+        severity="success"
+        styleClass="price-tag"
+      ></p-tag>
+    </div>
+  </ng-template>
+</p-card>
+
+

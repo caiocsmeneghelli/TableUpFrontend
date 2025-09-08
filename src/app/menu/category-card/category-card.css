@@ -1,0 +1,23 @@
+.category-card {
+  margin: 0.5rem;
+}
+
+.category-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.category-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.item-count-tag,
+.item-preview-tag,
+.more-items-tag {
+  margin-left: 0.25rem;
+}
+
+

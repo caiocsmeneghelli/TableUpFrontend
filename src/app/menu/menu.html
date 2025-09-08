@@ -4,41 +4,10 @@
     <p-panel header="Cardápio por Categorias" styleClass="categories-panel">
       <div class="categories-grid">
         @for(category of menuCategories; track category.categoryGuid) {
-          <p-card 
-            styleClass="category-card" 
-            (click)="onCategoryClick(category)"
-            [style]="{'cursor': 'pointer'}"
-          >
-            <ng-template pTemplate="header">
-              <div class="category-header-content">
-                <h3>{{ category.categoryName }}</h3>
-                <p-tag 
-                  [value]="category.items.length + ' item(s)'" 
-                  severity="info"
-                  styleClass="item-count-tag"
-                ></p-tag>
-              </div>
-            </ng-template>
-            
-            <ng-template pTemplate="content">
-              <div class="category-preview">
-                @for(item of category.items.slice(0, 3); track item.guid) {
-                  <p-tag 
-                    [value]="item.name" 
-                    severity="secondary"
-                    styleClass="item-preview-tag"
-                  ></p-tag>
-                }
-                @if (category.items.length > 3) {
-                  <p-tag 
-                    [value]="'+' + (category.items.length - 3) + ' mais'" 
-                    severity="primary"
-                    styleClass="more-items-tag"
-                  ></p-tag>
-                }
-              </div>
-            </ng-template>
-          </p-card>
+          <app-category-card 
+            [category]="category"
+            (selectCategory)="onCategoryClick($event)"
+          />
         }
       </div>
     </p-panel>
@@ -62,23 +31,7 @@
       
       <div class="items-grid">
         @for(item of selectedCategory.items; track item.guid) {
-          <p-card styleClass="item-card">
-            <ng-template pTemplate="header">
-              <h3>{{ item.name }}</h3>
-            </ng-template>
-            
-            <ng-template pTemplate="content">
-              <p class="description">{{ item.description }}</p>
-              <p-divider></p-divider>
-              <div class="price-container">
-                <p-tag 
-                  [value]="'R$ ' + item.price.toFixed(2)" 
-                  severity="success"
-                  styleClass="price-tag"
-                ></p-tag>
-              </div>
-            </ng-template>
-          </p-card>
+          <app-menu-item-card [item]="item" />
         }
       </div>
     </p-panel>
