@@ -1,16 +1,6 @@
 import { Component } from '@angular/core';
 import { DUMMY_MENU } from '../dummy-menu';
-
-interface MenuCategory {
-  idCategory: string;
-  nameCategory: string;
-  items: Array<{
-    id: string;
-    name: string;
-    idCategory: string;
-    nameCategory: string;
-  }>;
-}
+import { MenuCategory } from './interfaces/menu.interfaces';
 
 @Component({
   selector: 'app-menu',
@@ -39,13 +29,13 @@ export class Menu {
     const map = new Map<string, MenuCategory>();
 
     for (const item of this.menu) {
-      const existing = map.get(item.idCategory);
+      const existing = map.get(item.categoryGuid);
       if (existing) {
         existing.items.push(item);
       } else {
-        map.set(item.idCategory, {
-          idCategory: item.idCategory,
-          nameCategory: item.nameCategory,
+        map.set(item.categoryGuid, {
+          categoryGuid: item.categoryGuid,
+          categoryName: item.categoryName,
           items: [item],
         });
       }

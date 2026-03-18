@@ -1,23 +1,30 @@
 <p>menu works!</p>
 
-@for(category of categories; track category.idCategory) {
+@for(category of categories; track category.categoryGuid) {
   <section class="category">
     <button
       class="category__toggle"
       type="button"
-      (click)="toggleCategory(category.idCategory)"
-      aria-expanded="{{isCategoryExpanded(category.idCategory)}}"
+      (click)="toggleCategory(category.categoryGuid)"
+      aria-expanded="{{isCategoryExpanded(category.categoryGuid)}}"
     >
-      {{category.nameCategory}}
+      {{category.categoryName}}
       <span class="category__icon" aria-hidden="true">
-        {{isCategoryExpanded(category.idCategory) ? '▾' : '▸'}}
+        {{isCategoryExpanded(category.categoryGuid) ? '▾' : '▸'}}
       </span>
     </button>
 
-    @if(isCategoryExpanded(category.idCategory)) {
+    @if(isCategoryExpanded(category.categoryGuid)) {
       <div class="category__items">
-        @for(item of category.items; track item.id) {
-          <p class="category__item">{{item.name}}</p>
+        @for(item of category.items; track item.guid) {
+          <div class="category__item">
+        <div class="category__item__main">
+          <span class="category__item__name">{{item.name}}</span>
+          <span class="category__item__price">R$ {{item.price}}</span>
+        </div>
+        <p class="category__item__description">{{item.description}}</p>
+        <small class="category__item__status">Status: {{item.status}}</small>
+      </div>
         }
       </div>
     }

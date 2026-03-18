@@ -1,20 +1,29 @@
 export const DUMMY_MENU = [
   {
-    id: 'm1',
+    guid: '00000000-0000-0000-0000-000000000001',
     name: 'Costela',
-    idCategory: 'c1',
-    nameCategory: 'Carne'
+    description: 'Costela suculenta com tempero artesanal',
+    price: 89.9,
+    categoryGuid: '00000000-0000-0000-0000-000000000010',
+    categoryName: 'Carne',
+    status: 'Active',
   },
   {
-    id:'m2',
+    guid: '00000000-0000-0000-0000-000000000002',
     name: 'Picanha',
-    idCategory: 'c1',
-    nameCategory: 'Carne'
+    description: 'Picanha grelhada ao ponto',
+    price: 119.9,
+    categoryGuid: '00000000-0000-0000-0000-000000000010',
+    categoryName: 'Carne',
+    status: 'Active',
   },
   {
-    id:'m3',
+    guid: '00000000-0000-0000-0000-000000000003',
     name: 'Fraldinha',
-    idCategory: 'c2',
-    nameCategory: 'Carne Segunda'
+    description: 'Fraldinha macia com molho especial',
+    price: 79.9,
+    categoryGuid: '00000000-0000-0000-0000-000000000020',
+    categoryName: 'Carne Segunda',
+    status: 'Active',
   }
 ];

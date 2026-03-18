@@ -33,5 +33,35 @@
 }
 
 .category__item {
-  margin: 6px 0;
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.category__item__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.category__item__name {
+  font-weight: 600;
+}
+
+.category__item__price {
+  color: #333;
+}
+
+.category__item__description {
+  margin: 4px 0 2px;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.category__item__status {
+  color: #777;
+  font-size: 0.8rem;
 }
