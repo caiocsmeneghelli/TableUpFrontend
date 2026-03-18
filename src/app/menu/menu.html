@@ -1,1 +1,25 @@
 <p>menu works!</p>
+
+@for(category of categories; track category.idCategory) {
+  <section class="category">
+    <button
+      class="category__toggle"
+      type="button"
+      (click)="toggleCategory(category.idCategory)"
+      aria-expanded="{{isCategoryExpanded(category.idCategory)}}"
+    >
+      {{category.nameCategory}}
+      <span class="category__icon" aria-hidden="true">
+        {{isCategoryExpanded(category.idCategory) ? '▾' : '▸'}}
+      </span>
+    </button>
+
+    @if(isCategoryExpanded(category.idCategory)) {
+      <div class="category__items">
+        @for(item of category.items; track item.id) {
+          <p class="category__item">{{item.name}}</p>
+        }
+      </div>
+    }
+  </section>
+}
