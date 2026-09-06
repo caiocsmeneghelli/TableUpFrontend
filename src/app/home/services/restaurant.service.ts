@@ -6,7 +6,7 @@ import { Restaurant } from '../interfaces/restaurant.interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class RestaurantService {
-  private readonly baseUrl = `${environment.apiUrl}/api/restaurant`;
+  private readonly baseUrl = `${environment.apiUrl}/api/restaurant/active`;
 
   constructor(private http: HttpClient) {}
 
