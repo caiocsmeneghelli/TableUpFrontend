@@ -3,12 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-admin',
   imports: [FormsModule, RouterLink],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  templateUrl: './admin.html',
+  styleUrl: './admin.scss',
 })
-export class Login {
+export class Admin {
   email = '';
   password = '';
   error = '';

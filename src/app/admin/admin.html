@@ -1,0 +1,32 @@
+<div class="admin">
+  <form class="admin__form" (ngSubmit)="onSubmit()" #adminForm="ngForm">
+    <h1 class="admin__title">Entrar</h1>
+
+    <label class="admin__label" for="email">E-mail</label>
+    <input
+      class="admin__input"
+      id="email"
+      name="email"
+      type="email"
+      [(ngModel)]="email"
+      autocomplete="username"
+    />
+
+    <label class="admin__label" for="password">Senha</label>
+    <input
+      class="admin__input"
+      id="password"
+      name="password"
+      type="password"
+      [(ngModel)]="password"
+      autocomplete="current-password"
+    />
+
+    @if (error) {
+      <p class="admin__error">{{ error }}</p>
+    }
+
+    <button class="admin__submit" type="submit">Entrar</button>
+    <a class="admin__back" routerLink="/home">Voltar</a>
+  </form>
+</div>
