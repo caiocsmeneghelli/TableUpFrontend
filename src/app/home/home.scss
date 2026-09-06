@@ -1,6 +1,5 @@
 .home__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -11,24 +10,9 @@
   margin: 0;
 }
 
-.home__login-button {
-  padding: 0.6rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: #ffffff;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.home__login-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-}
-
 .home__restaurants {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
   gap: 1.25rem;
   padding: 2rem;
 }
@@ -39,6 +23,26 @@
   padding: 1.25rem;
   background: #fafafa;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+@media (max-width: 600px) {
+  .home__header {
+    padding: 1rem 1.25rem;
+  }
+
+  .home__title {
+    font-size: 1.25rem;
+  }
+
+  .home__restaurants {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .restaurant-card {
+    padding: 1rem;
+  }
 }
 
 .restaurant-card:hover {

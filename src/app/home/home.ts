@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { DUMMY_RESTAURANTS } from '../dummy-restaurants';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Restaurant } from './interfaces/restaurant.interfaces';
+import { RestaurantService } from './services/restaurant.service';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
-  restaurants: Restaurant[] = DUMMY_RESTAURANTS;
+  restaurants;
+
+  constructor(private restaurantService: RestaurantService) {
+    this.restaurants = toSignal(this.restaurantService.getAll(), { initialValue: [] as Restaurant[] });
+  }
 }
