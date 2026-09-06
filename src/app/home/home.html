@@ -1,4 +1,13 @@
-<div class="home__buttons">
-  <button class="home__button" type="button" routerLink="/menu">Menu</button>
-  <button class="home__button" type="button">Conta</button>
+<header class="home__header">
+  <h1 class="home__title">Restaurantes</h1>
+  <button class="home__login-button" type="button" routerLink="/login">Entrar</button>
+</header>
+
+<div class="home__restaurants">
+  @for (restaurant of restaurants; track restaurant.id) {
+    <article class="restaurant-card">
+      <h2 class="restaurant-card__name">{{ restaurant.name }}</h2>
+      <p class="restaurant-card__description">{{ restaurant.description }}</p>
+    </article>
+  }
 </div>

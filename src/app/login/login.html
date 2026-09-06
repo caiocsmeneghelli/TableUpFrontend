@@ -1,0 +1,32 @@
+<div class="login">
+  <form class="login__form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <h1 class="login__title">Entrar</h1>
+
+    <label class="login__label" for="email">E-mail</label>
+    <input
+      class="login__input"
+      id="email"
+      name="email"
+      type="email"
+      [(ngModel)]="email"
+      autocomplete="username"
+    />
+
+    <label class="login__label" for="password">Senha</label>
+    <input
+      class="login__input"
+      id="password"
+      name="password"
+      type="password"
+      [(ngModel)]="password"
+      autocomplete="current-password"
+    />
+
+    @if (error) {
+      <p class="login__error">{{ error }}</p>
+    }
+
+    <button class="login__submit" type="submit">Entrar</button>
+    <a class="login__back" routerLink="/home">Voltar</a>
+  </form>
+</div>
