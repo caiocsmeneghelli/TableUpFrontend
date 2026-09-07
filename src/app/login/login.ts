@@ -31,7 +31,7 @@ export class Login {
         }
 
         localStorage.setItem('token', result.value);
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/admin');
       },
       error: () => {
         this.error.set('Não foi possível entrar.');

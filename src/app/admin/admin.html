@@ -1,0 +1,23 @@
+<div class="admin">
+  <button class="admin__menu-toggle" type="button" (click)="toggleMenu()" aria-label="Abrir menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  @if (menuOpen()) {
+    <div class="admin__overlay" (click)="closeMenu()"></div>
+  }
+
+  <aside class="admin__sidebar" [class.admin__sidebar--open]="menuOpen()">
+    <nav class="admin__nav">
+      @for (entity of entities; track entity.label) {
+        <button class="admin__nav-item" type="button" (click)="closeMenu()">{{ entity.label }}</button>
+      }
+    </nav>
+  </aside>
+
+  <main class="admin__content">
+    <p>Selecione uma entidade para gerenciar.</p>
+  </main>
+</div>
