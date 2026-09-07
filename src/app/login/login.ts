@@ -4,12 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from './services/auth.service';
 
 @Component({
-  selector: 'app-admin',
+  selector: 'app-login',
   imports: [FormsModule, RouterLink],
-  templateUrl: './admin.html',
-  styleUrl: './admin.scss',
+  templateUrl: './login.html',
+  styleUrl: './login.scss',
 })
-export class Admin {
+export class Login {
   email = '';
   password = '';
   error = signal('');
