@@ -22,8 +22,8 @@
       autocomplete="current-password"
     />
 
-    @if (error) {
-      <p class="admin__error">{{ error }}</p>
+    @if (error()) {
+      <p class="admin__error">{{ error() }}</p>
     }
 
     <button class="admin__submit" type="submit">Entrar</button>
