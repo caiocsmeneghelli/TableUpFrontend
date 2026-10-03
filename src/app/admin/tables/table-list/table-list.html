@@ -4,6 +4,14 @@
     <button class="table-list__new" type="button" (click)="startCreate()">+ Nova mesa</button>
   </div>
 
+  <input
+    class="table-list__filter"
+    type="search"
+    placeholder="Filtrar por número ou restaurante"
+    [ngModel]="filter()"
+    (ngModelChange)="filter.set($event)"
+  />
+
   @if (error()) {
     <p class="table-list__error">{{ error() }}</p>
   }
@@ -23,7 +31,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (table of tables(); track table.tableGuid) {
+          @for (table of filteredTables(); track table.tableGuid) {
             <tr>
               <td class="table-list__actions">
                 <button type="button" (click)="startEdit(table)">Editar</button>
@@ -36,7 +44,7 @@
             </tr>
           } @empty {
             <tr>
-              <td colspan="5">Nenhuma mesa cadastrada.</td>
+              <td colspan="5">{{ tables().length ? 'Nenhuma mesa encontrada para o filtro.' : 'Nenhuma mesa cadastrada.' }}</td>
             </tr>
           }
         </tbody>

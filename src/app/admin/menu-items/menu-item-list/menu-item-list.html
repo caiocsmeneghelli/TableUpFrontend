@@ -4,6 +4,14 @@
     <button class="item-list__new" type="button" (click)="startCreate()">+ Novo item</button>
   </div>
 
+  <input
+    class="item-list__filter"
+    type="search"
+    placeholder="Filtrar por nome, categoria ou restaurante"
+    [ngModel]="filter()"
+    (ngModelChange)="filter.set($event)"
+  />
+
   @if (error()) {
     <p class="item-list__error">{{ error() }}</p>
   }
@@ -24,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of items(); track item.guid) {
+          @for (item of filteredItems(); track item.guid) {
             <tr>
               <td class="item-list__actions">
                 <button type="button" (click)="startEdit(item)">Editar</button>
@@ -43,7 +51,7 @@
             </tr>
           } @empty {
             <tr>
-              <td colspan="6">Nenhum item cadastrado.</td>
+              <td colspan="6">{{ items().length ? 'Nenhum item encontrado para o filtro.' : 'Nenhum item cadastrado.' }}</td>
             </tr>
           }
         </tbody>
@@ -98,8 +106,16 @@
       <label for="item-description">Descrição</label>
       <textarea id="item-description" name="description" rows="3" maxlength="500" [(ngModel)]="form.description"></textarea>
 
-      <label for="item-value">Preço (R$)</label>
-      <input id="item-value" name="value" type="number" min="0.01" step="0.01" [(ngModel)]="form.value" />
+      <label for="item-value">Preço</label>
+      <input
+        id="item-value"
+        name="value"
+        type="text"
+        inputmode="numeric"
+        placeholder="R$ 0,00"
+        appCurrencyMask
+        [(ngModel)]="form.value"
+      />
 
       <div class="item-list__edit-actions">
         <button type="button" (click)="cancelForm()">Cancelar</button>

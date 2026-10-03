@@ -1,6 +1,8 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CurrencyMask } from '../../../core/directives/currency-mask';
+import { matchesSearch } from '../../../core/utils/search';
 import { MenuCategoryAdmin } from '../../menu-categories/interfaces/menu-category-admin.interfaces';
 import { MenuCategoryAdminService } from '../../menu-categories/services/menu-category-admin.service';
 import { RestaurantAdmin } from '../../restaurants/interfaces/restaurant-admin.interfaces';
@@ -18,7 +20,7 @@ const EMPTY_FORM: MenuItemAdminForm = {
 
 @Component({
   selector: 'app-menu-item-list',
-  imports: [FormsModule, DatePipe, CurrencyPipe],
+  imports: [FormsModule, DatePipe, CurrencyPipe, CurrencyMask],
   templateUrl: './menu-item-list.html',
   styleUrl: './menu-item-list.scss',
 })
@@ -30,6 +32,11 @@ export class MenuItemList implements OnInit {
   loadingCategories = signal(false);
   error = signal('');
   formError = signal('');
+
+  filter = signal('');
+  filteredItems = computed(() =>
+    this.items().filter((item) => matchesSearch(this.filter(), item.name, item.categoryName, item.restaurantName)),
+  );
 
   editingId = signal<string | null>(null);
   creating = signal(false);

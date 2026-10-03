@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { matchesSearch } from '../../../core/utils/search';
 import { RestaurantAdmin } from '../../restaurants/interfaces/restaurant-admin.interfaces';
 import { RestaurantAdminService } from '../../restaurants/services/restaurant-admin.service';
 import { TableAdmin, TableAdminCreateForm } from '../interfaces/table-admin.interfaces';
@@ -17,6 +18,11 @@ export class TableList implements OnInit {
   restaurants = signal<RestaurantAdmin[]>([]);
   loading = signal(false);
   error = signal('');
+
+  filter = signal('');
+  filteredTables = computed(() =>
+    this.tables().filter((table) => matchesSearch(this.filter(), table.tableNumber, table.restaurantName)),
+  );
 
   editingId = signal<string | null>(null);
   creating = signal(false);

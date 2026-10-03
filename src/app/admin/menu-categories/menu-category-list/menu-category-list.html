@@ -4,6 +4,14 @@
     <button class="category-list__new" type="button" (click)="startCreate()">+ Nova categoria</button>
   </div>
 
+  <input
+    class="category-list__filter"
+    type="search"
+    placeholder="Filtrar por nome ou restaurante"
+    [ngModel]="filter()"
+    (ngModelChange)="filter.set($event)"
+  />
+
   @if (error()) {
     <p class="category-list__error">{{ error() }}</p>
   }
@@ -23,7 +31,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (category of categories(); track category.guid) {
+          @for (category of filteredCategories(); track category.guid) {
             <tr>
               <td class="category-list__actions">
                 <button type="button" (click)="startEdit(category)">Editar</button>
@@ -36,7 +44,7 @@
             </tr>
           } @empty {
             <tr>
-              <td colspan="5">Nenhuma categoria cadastrada.</td>
+              <td colspan="5">{{ categories().length ? 'Nenhuma categoria encontrada para o filtro.' : 'Nenhuma categoria cadastrada.' }}</td>
             </tr>
           }
         </tbody>
