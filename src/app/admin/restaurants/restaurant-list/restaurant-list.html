@@ -1,5 +1,8 @@
 <div class="restaurant-list">
-  <h2 class="restaurant-list__title">Restaurantes</h2>
+  <div class="restaurant-list__header">
+    <h2 class="restaurant-list__title">Restaurantes</h2>
+    <button class="restaurant-list__new" type="button" (click)="startCreate()">+ Novo restaurante</button>
+  </div>
 
   @if (error()) {
     <p class="restaurant-list__error">{{ error() }}</p>
@@ -41,10 +44,10 @@
     </div>
   }
 
-  @if (editingId()) {
-    <div class="restaurant-list__overlay" (click)="cancelEdit()"></div>
-    <form class="restaurant-list__edit" (ngSubmit)="saveEdit()" #editRestaurantForm="ngForm">
-      <h3>Editar restaurante</h3>
+  @if (editingId() || creating()) {
+    <div class="restaurant-list__overlay" (click)="cancelForm()"></div>
+    <form class="restaurant-list__edit" (ngSubmit)="saveForm()" #editRestaurantForm="ngForm">
+      <h3>{{ creating() ? 'Novo restaurante' : 'Editar restaurante' }}</h3>
 
       <label for="edit-name">Nome</label>
       <input id="edit-name" name="name" type="text" [(ngModel)]="editForm.name" />
@@ -59,7 +62,7 @@
       <textarea id="edit-description" name="description" [(ngModel)]="editForm.description"></textarea>
 
       <div class="restaurant-list__edit-actions">
-        <button type="button" (click)="cancelEdit()">Cancelar</button>
+        <button type="button" (click)="cancelForm()">Cancelar</button>
         <button type="submit" [disabled]="saving()">Salvar</button>
       </div>
     </form>

@@ -20,6 +20,10 @@ export class RestaurantAdminService {
     return this.http.get<RestaurantAdmin[]>(`${this.baseUrl}/active`);
   }
 
+  create(form: RestaurantAdminForm): Observable<Result> {
+    return this.http.post<Result>(this.baseUrl, form);
+  }
+
   update(id: string, form: RestaurantAdminForm): Observable<Result> {
     return this.http.put<Result>(`${this.baseUrl}/${id}`, form);
   }

@@ -15,6 +15,7 @@ export class RestaurantList implements OnInit {
   error = signal('');
 
   editingId = signal<string | null>(null);
+  creating = signal(false);
   editForm: RestaurantAdminForm = { name: '', slug: '', email: '', description: '' };
   saving = signal(false);
 
@@ -39,6 +40,11 @@ export class RestaurantList implements OnInit {
     });
   }
 
+  startCreate() {
+    this.creating.set(true);
+    this.editForm = { name: '', slug: '', email: '', description: '' };
+  }
+
   startEdit(restaurant: RestaurantAdmin) {
     this.editingId.set(restaurant.id);
     this.editForm = {
@@ -49,11 +55,41 @@ export class RestaurantList implements OnInit {
     };
   }
 
-  cancelEdit() {
+  cancelForm() {
     this.editingId.set(null);
+    this.creating.set(false);
   }
 
-  saveEdit() {
+  saveForm() {
+    if (this.creating()) {
+      this.saveCreate();
+      return;
+    }
+
+    this.saveEdit();
+  }
+
+  private saveCreate() {
+    this.saving.set(true);
+    this.restaurantAdminService.create(this.editForm).subscribe({
+      next: (result) => {
+        this.saving.set(false);
+        if (!result.isSuccess) {
+          this.error.set(result.error || 'Não foi possível criar o restaurante.');
+          return;
+        }
+
+        this.creating.set(false);
+        this.load();
+      },
+      error: () => {
+        this.saving.set(false);
+        this.error.set('Não foi possível criar o restaurante.');
+      },
+    });
+  }
+
+  private saveEdit() {
     const id = this.editingId();
     if (!id) {
       return;
