@@ -1,0 +1,70 @@
+<div class="table-list">
+  <div class="table-list__header">
+    <h2 class="table-list__title">Mesas</h2>
+    <button class="table-list__new" type="button" (click)="startCreate()">+ Nova mesa</button>
+  </div>
+
+  @if (error()) {
+    <p class="table-list__error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else {
+    <div class="table-list__table-wrapper">
+      <table class="table-list__table">
+        <thead>
+          <tr>
+            <th class="table-list__col-actions"></th>
+            <th>Número</th>
+            <th>Restaurante</th>
+            <th>Criado por</th>
+            <th>Criado em</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (table of tables(); track table.tableGuid) {
+            <tr>
+              <td class="table-list__actions">
+                <button type="button" (click)="startEdit(table)">Editar</button>
+                <button type="button" (click)="remove(table)">Excluir</button>
+              </td>
+              <td>{{ table.tableNumber }}</td>
+              <td>{{ table.restaurantName }}</td>
+              <td>{{ table.createdBy }}</td>
+              <td>{{ table.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">Nenhuma mesa cadastrada.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (editingId() || creating()) {
+    <div class="table-list__overlay" (click)="cancelForm()"></div>
+    <form class="table-list__edit" (ngSubmit)="saveForm()" #tableForm="ngForm">
+      <h3>{{ creating() ? 'Nova mesa' : 'Editar mesa' }}</h3>
+
+      <label for="table-number">Número</label>
+      <input id="table-number" name="tableNumber" type="text" maxlength="3" [(ngModel)]="form.tableNumber" />
+
+      @if (creating()) {
+        <label for="table-restaurant">Restaurante</label>
+        <select id="table-restaurant" name="restaurantGuid" [(ngModel)]="form.restaurantGuid">
+          @for (restaurant of restaurants(); track restaurant.id) {
+            <option [value]="restaurant.id">{{ restaurant.name }}</option>
+          }
+        </select>
+      }
+
+      <div class="table-list__edit-actions">
+        <button type="button" (click)="cancelForm()">Cancelar</button>
+        <button type="submit" [disabled]="saving()">Salvar</button>
+      </div>
+    </form>
+  }
+</div>
