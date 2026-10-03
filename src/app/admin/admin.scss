@@ -41,6 +41,11 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
+.admin__nav-item--active {
+  background: rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
 .admin__content {
   flex: 1;
   padding: 2rem;

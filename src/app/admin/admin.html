@@ -11,13 +11,25 @@
 
   <aside class="admin__sidebar" [class.admin__sidebar--open]="menuOpen()">
     <nav class="admin__nav">
-      @for (entity of entities; track entity.label) {
-        <button class="admin__nav-item" type="button" (click)="closeMenu()">{{ entity.label }}</button>
+      @for (entity of entities; track entity.key) {
+        <button
+          class="admin__nav-item"
+          type="button"
+          [class.admin__nav-item--active]="selectedKey() === entity.key"
+          (click)="selectEntity(entity)"
+        >{{ entity.label }}</button>
       }
     </nav>
   </aside>
 
   <main class="admin__content">
-    <p>Selecione uma entidade para gerenciar.</p>
+    @switch (selectedKey()) {
+      @case ('restaurants') {
+        <app-restaurant-list />
+      }
+      @default {
+        <p>Selecione uma entidade para gerenciar.</p>
+      }
+    }
   </main>
 </div>

@@ -1,0 +1,67 @@
+<div class="restaurant-list">
+  <h2 class="restaurant-list__title">Restaurantes</h2>
+
+  @if (error()) {
+    <p class="restaurant-list__error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else {
+    <div class="restaurant-list__table-wrapper">
+      <table class="restaurant-list__table">
+        <thead>
+          <tr>
+            <th class="restaurant-list__col-actions"></th>
+            <th class="restaurant-list__col-name">Nome</th>
+            <th class="restaurant-list__col-slug">Slug</th>
+            <th class="restaurant-list__col-email">E-mail</th>
+            <th class="restaurant-list__col-description">Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (restaurant of restaurants(); track restaurant.id) {
+            <tr>
+              <td class="restaurant-list__actions">
+                <button type="button" (click)="startEdit(restaurant)">Editar</button>
+                <button type="button" (click)="remove(restaurant)">Excluir</button>
+              </td>
+              <td>{{ restaurant.name }}</td>
+              <td>{{ restaurant.slug }}</td>
+              <td>{{ restaurant.email }}</td>
+              <td class="restaurant-list__description">{{ restaurant.description }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">Nenhum restaurante cadastrado.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (editingId()) {
+    <div class="restaurant-list__overlay" (click)="cancelEdit()"></div>
+    <form class="restaurant-list__edit" (ngSubmit)="saveEdit()" #editRestaurantForm="ngForm">
+      <h3>Editar restaurante</h3>
+
+      <label for="edit-name">Nome</label>
+      <input id="edit-name" name="name" type="text" [(ngModel)]="editForm.name" />
+
+      <label for="edit-slug">Slug</label>
+      <input id="edit-slug" name="slug" type="text" [(ngModel)]="editForm.slug" />
+
+      <label for="edit-email">E-mail</label>
+      <input id="edit-email" name="email" type="email" [(ngModel)]="editForm.email" />
+
+      <label for="edit-description">Descrição</label>
+      <textarea id="edit-description" name="description" [(ngModel)]="editForm.description"></textarea>
+
+      <div class="restaurant-list__edit-actions">
+        <button type="button" (click)="cancelEdit()">Cancelar</button>
+        <button type="submit" [disabled]="saving()">Salvar</button>
+      </div>
+    </form>
+  }
+</div>
