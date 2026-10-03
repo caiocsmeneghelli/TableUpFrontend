@@ -4,33 +4,33 @@ import { FormsModule } from '@angular/forms';
 import { matchesSearch } from '../../../core/utils/search';
 import { RestaurantAdmin } from '../../restaurants/interfaces/restaurant-admin.interfaces';
 import { RestaurantAdminService } from '../../restaurants/services/restaurant-admin.service';
-import { TableAdmin, TableAdminCreateForm } from '../interfaces/table-admin.interfaces';
-import { TableAdminService } from '../services/table-admin.service';
+import { MenuCategoryAdmin, MenuCategoryAdminForm } from '../interfaces/menu-category-admin.interfaces';
+import { MenuCategoryAdminService } from '../services/menu-category-admin.service';
 
 @Component({
-  selector: 'app-table-list',
+  selector: 'app-menu-category-list',
   imports: [FormsModule, DatePipe],
-  templateUrl: './table-list.html',
-  styleUrl: './table-list.scss',
+  templateUrl: './menu-category-list.html',
+  styleUrl: './menu-category-list.scss',
 })
-export class TableList implements OnInit {
-  tables = signal<TableAdmin[]>([]);
+export class MenuCategoryList implements OnInit {
+  categories = signal<MenuCategoryAdmin[]>([]);
   restaurants = signal<RestaurantAdmin[]>([]);
   loading = signal(false);
   error = signal('');
 
   filter = signal('');
-  filteredTables = computed(() =>
-    this.tables().filter((table) => matchesSearch(this.filter(), table.tableNumber, table.restaurantName)),
+  filteredCategories = computed(() =>
+    this.categories().filter((category) => matchesSearch(this.filter(), category.name, category.restaurantName)),
   );
 
   editingId = signal<string | null>(null);
   creating = signal(false);
-  form: TableAdminCreateForm = { tableNumber: '', restaurantGuid: '' };
+  form: MenuCategoryAdminForm = { name: '', restaurantGuid: '' };
   saving = signal(false);
 
   constructor(
-    private tableAdminService: TableAdminService,
+    private menuCategoryAdminService: MenuCategoryAdminService,
     private restaurantAdminService: RestaurantAdminService,
   ) {}
 
@@ -44,13 +44,13 @@ export class TableList implements OnInit {
   load() {
     this.loading.set(true);
     this.error.set('');
-    this.tableAdminService.getAll().subscribe({
-      next: (tables) => {
-        this.tables.set(tables);
+    this.menuCategoryAdminService.getAll().subscribe({
+      next: (categories) => {
+        this.categories.set(categories);
         this.loading.set(false);
       },
       error: () => {
-        this.error.set('Não foi possível carregar as mesas.');
+        this.error.set('Não foi possível carregar as categorias.');
         this.loading.set(false);
       },
     });
@@ -58,12 +58,12 @@ export class TableList implements OnInit {
 
   startCreate() {
     this.creating.set(true);
-    this.form = { tableNumber: '', restaurantGuid: this.restaurants()[0]?.id ?? '' };
+    this.form = { name: '', restaurantGuid: this.restaurants()[0]?.id ?? '' };
   }
 
-  startEdit(table: TableAdmin) {
-    this.editingId.set(table.tableGuid);
-    this.form = { tableNumber: table.tableNumber, restaurantGuid: table.restaurantGuid };
+  startEdit(category: MenuCategoryAdmin) {
+    this.editingId.set(category.guid);
+    this.form = { name: category.name, restaurantGuid: category.restaurantGuid };
   }
 
   cancelForm() {
@@ -82,20 +82,20 @@ export class TableList implements OnInit {
 
   private saveCreate() {
     this.saving.set(true);
-    this.tableAdminService.create(this.form).subscribe({
+    this.menuCategoryAdminService.create(this.form).subscribe({
       next: (result) => {
         this.saving.set(false);
         if (!result.isSuccess) {
-          this.error.set(result.error || 'Não foi possível criar a mesa.');
+          this.error.set(result.error || 'Não foi possível criar a categoria.');
           return;
         }
 
         this.creating.set(false);
         this.load();
       },
-      error: () => {
+      error: (err) => {
         this.saving.set(false);
-        this.error.set('Não foi possível criar a mesa.');
+        this.error.set(err.error?.error || 'Não foi possível criar a categoria.');
       },
     });
   }
@@ -107,9 +107,7 @@ export class TableList implements OnInit {
     }
 
     this.saving.set(true);
-    this.tableAdminService
-      .update(id, { tableNumber: this.form.tableNumber, restaurantGuid: this.form.restaurantGuid })
-      .subscribe({
+    this.menuCategoryAdminService.update(id, this.form).subscribe({
       next: (result) => {
         this.saving.set(false);
         if (!result.isSuccess) {
@@ -120,24 +118,24 @@ export class TableList implements OnInit {
         this.editingId.set(null);
         this.load();
       },
-      error: () => {
+      error: (err) => {
         this.saving.set(false);
-        this.error.set('Não foi possível salvar as alterações.');
+        this.error.set(err.error?.error || 'Não foi possível salvar as alterações.');
       },
     });
   }
 
-  remove(table: TableAdmin) {
-    if (!confirm(`Excluir a mesa "${table.tableNumber}"?`)) {
+  remove(category: MenuCategoryAdmin) {
+    if (!confirm(`Excluir a categoria "${category.name}"? Os itens de menu dela também serão inativados.`)) {
       return;
     }
 
-    this.tableAdminService.delete(table.tableGuid).subscribe({
+    this.menuCategoryAdminService.delete(category.guid).subscribe({
       next: () => {
-        this.tables.update((list) => list.filter((t) => t.tableGuid !== table.tableGuid));
+        this.categories.update((list) => list.filter((c) => c.guid !== category.guid));
       },
       error: () => {
-        this.error.set('Não foi possível excluir a mesa.');
+        this.error.set('Não foi possível excluir a categoria.');
       },
     });
   }

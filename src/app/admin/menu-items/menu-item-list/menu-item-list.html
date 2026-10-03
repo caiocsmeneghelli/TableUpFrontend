@@ -1,0 +1,126 @@
+<div class="item-list">
+  <div class="item-list__header">
+    <h2 class="item-list__title">Itens de Menu</h2>
+    <button class="item-list__new" type="button" (click)="startCreate()">+ Novo item</button>
+  </div>
+
+  <input
+    class="item-list__filter"
+    type="search"
+    placeholder="Filtrar por nome, categoria ou restaurante"
+    [ngModel]="filter()"
+    (ngModelChange)="filter.set($event)"
+  />
+
+  @if (error()) {
+    <p class="item-list__error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else {
+    <div class="item-list__table-wrapper">
+      <table class="item-list__table">
+        <thead>
+          <tr>
+            <th class="item-list__col-actions"></th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Categoria</th>
+            <th>Restaurante</th>
+            <th>Criado em</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filteredItems(); track item.guid) {
+            <tr>
+              <td class="item-list__actions">
+                <button type="button" (click)="startEdit(item)">Editar</button>
+                <button type="button" (click)="remove(item)">Excluir</button>
+              </td>
+              <td>
+                {{ item.name }}
+                @if (item.description) {
+                  <span class="item-list__description">{{ item.description }}</span>
+                }
+              </td>
+              <td>{{ item.value | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+              <td>{{ item.categoryName }}</td>
+              <td>{{ item.restaurantName }}</td>
+              <td>{{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">{{ items().length ? 'Nenhum item encontrado para o filtro.' : 'Nenhum item cadastrado.' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (editingId() || creating()) {
+    <div class="item-list__overlay" (click)="cancelForm()"></div>
+    <form class="item-list__edit" (ngSubmit)="saveForm()" #itemForm="ngForm">
+      <h3>{{ creating() ? 'Novo item' : 'Editar item' }}</h3>
+
+      @if (formError()) {
+        <p class="item-list__error">{{ formError() }}</p>
+      }
+
+      <label for="item-restaurant">Restaurante</label>
+      <select
+        id="item-restaurant"
+        name="restaurantGuid"
+        [(ngModel)]="form.restaurantGuid"
+        (ngModelChange)="onRestaurantChange($event)"
+      >
+        <option value="" disabled>Selecione o restaurante</option>
+        @for (restaurant of restaurants(); track restaurant.id) {
+          <option [value]="restaurant.id">{{ restaurant.name }}</option>
+        }
+      </select>
+
+      <label for="item-category">Categoria</label>
+      <select
+        id="item-category"
+        name="categoryGuid"
+        [(ngModel)]="form.categoryGuid"
+        [disabled]="!form.restaurantGuid || loadingCategories() || categories().length === 0"
+      >
+        @if (!form.restaurantGuid) {
+          <option value="">Selecione um restaurante primeiro</option>
+        } @else if (loadingCategories()) {
+          <option value="">Carregando categorias...</option>
+        } @else if (categories().length === 0) {
+          <option value="">Nenhuma categoria ativa neste restaurante</option>
+        }
+        @for (category of categories(); track category.guid) {
+          <option [value]="category.guid">{{ category.name }}</option>
+        }
+      </select>
+
+      <label for="item-name">Nome</label>
+      <input id="item-name" name="name" type="text" maxlength="100" [(ngModel)]="form.name" />
+
+      <label for="item-description">Descrição</label>
+      <textarea id="item-description" name="description" rows="3" maxlength="500" [(ngModel)]="form.description"></textarea>
+
+      <label for="item-value">Preço</label>
+      <input
+        id="item-value"
+        name="value"
+        type="text"
+        inputmode="numeric"
+        placeholder="R$ 0,00"
+        appCurrencyMask
+        [(ngModel)]="form.value"
+      />
+
+      <div class="item-list__edit-actions">
+        <button type="button" (click)="cancelForm()">Cancelar</button>
+        <button type="submit" [disabled]="saving() || !form.categoryGuid">Salvar</button>
+      </div>
+    </form>
+  }
+</div>

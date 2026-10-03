@@ -1,0 +1,78 @@
+<div class="category-list">
+  <div class="category-list__header">
+    <h2 class="category-list__title">Categorias de Menu</h2>
+    <button class="category-list__new" type="button" (click)="startCreate()">+ Nova categoria</button>
+  </div>
+
+  <input
+    class="category-list__filter"
+    type="search"
+    placeholder="Filtrar por nome ou restaurante"
+    [ngModel]="filter()"
+    (ngModelChange)="filter.set($event)"
+  />
+
+  @if (error()) {
+    <p class="category-list__error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else {
+    <div class="category-list__table-wrapper">
+      <table class="category-list__table">
+        <thead>
+          <tr>
+            <th class="category-list__col-actions"></th>
+            <th>Nome</th>
+            <th>Restaurante</th>
+            <th>Criado por</th>
+            <th>Criado em</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (category of filteredCategories(); track category.guid) {
+            <tr>
+              <td class="category-list__actions">
+                <button type="button" (click)="startEdit(category)">Editar</button>
+                <button type="button" (click)="remove(category)">Excluir</button>
+              </td>
+              <td>{{ category.name }}</td>
+              <td>{{ category.restaurantName }}</td>
+              <td>{{ category.createdBy }}</td>
+              <td>{{ category.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">{{ categories().length ? 'Nenhuma categoria encontrada para o filtro.' : 'Nenhuma categoria cadastrada.' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (editingId() || creating()) {
+    <div class="category-list__overlay" (click)="cancelForm()"></div>
+    <form class="category-list__edit" (ngSubmit)="saveForm()" #categoryForm="ngForm">
+      <h3>{{ creating() ? 'Nova categoria' : 'Editar categoria' }}</h3>
+
+      <label for="category-name">Nome</label>
+      <input id="category-name" name="name" type="text" maxlength="100" [(ngModel)]="form.name" />
+
+      @if (creating()) {
+        <label for="category-restaurant">Restaurante</label>
+        <select id="category-restaurant" name="restaurantGuid" [(ngModel)]="form.restaurantGuid">
+          @for (restaurant of restaurants(); track restaurant.id) {
+            <option [value]="restaurant.id">{{ restaurant.name }}</option>
+          }
+        </select>
+      }
+
+      <div class="category-list__edit-actions">
+        <button type="button" (click)="cancelForm()">Cancelar</button>
+        <button type="submit" [disabled]="saving()">Salvar</button>
+      </div>
+    </form>
+  }
+</div>
