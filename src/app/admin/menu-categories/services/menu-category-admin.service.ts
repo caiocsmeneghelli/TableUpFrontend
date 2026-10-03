@@ -20,6 +20,10 @@ export class MenuCategoryAdminService {
     return this.http.get<MenuCategoryAdmin[]>(this.baseUrl);
   }
 
+  getByRestaurant(restaurantGuid: string): Observable<MenuCategoryAdmin[]> {
+    return this.http.get<MenuCategoryAdmin[]>(`${this.baseUrl}/restaurant/${restaurantGuid}`);
+  }
+
   create(form: MenuCategoryAdminForm): Observable<Result> {
     return this.http.post<Result>(this.baseUrl, form);
   }

@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { AdminEntity } from './interfaces/admin-entity.interfaces';
 import { MenuCategoryList } from './menu-categories/menu-category-list/menu-category-list';
+import { MenuItemList } from './menu-items/menu-item-list/menu-item-list';
 import { RestaurantList } from './restaurants/restaurant-list/restaurant-list';
 import { TableList } from './tables/table-list/table-list';
 
@@ -18,7 +19,7 @@ const DEFAULT_ENTITY_KEY = 'restaurants';
 
 @Component({
   selector: 'app-admin',
-  imports: [RestaurantList, MenuCategoryList, TableList],
+  imports: [RestaurantList, MenuCategoryList, MenuItemList, TableList],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',
 })
