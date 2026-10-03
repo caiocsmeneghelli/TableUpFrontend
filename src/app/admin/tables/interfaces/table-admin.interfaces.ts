@@ -14,4 +14,5 @@ export interface TableAdminCreateForm {
 
 export interface TableAdminEditForm {
   tableNumber: string;
+  restaurantGuid: string;
 }

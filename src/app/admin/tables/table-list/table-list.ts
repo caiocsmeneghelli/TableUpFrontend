@@ -101,7 +101,9 @@ export class TableList implements OnInit {
     }
 
     this.saving.set(true);
-    this.tableAdminService.update(id, { tableNumber: this.form.tableNumber }).subscribe({
+    this.tableAdminService
+      .update(id, { tableNumber: this.form.tableNumber, restaurantGuid: this.form.restaurantGuid })
+      .subscribe({
       next: (result) => {
         this.saving.set(false);
         if (!result.isSuccess) {
