@@ -5,7 +5,15 @@ export interface TableSummary {
   restaurantName: string;
 }
 
-export interface MenuCategory {
+export interface MenuCategoryItem {
   guid: string;
   name: string;
+  description: string;
+  value: number;
+}
+
+export interface MenuCategoryWithItems {
+  guid: string;
+  name: string;
+  items: MenuCategoryItem[];
 }
