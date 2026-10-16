@@ -8,5 +8,6 @@ export const routes: Routes = [
   {path: 'admin', loadComponent: () => import('./admin/admin').then(m => m.Admin), canActivate: [authGuard]},
   {path: 'menu', loadComponent: () => import('./menu/menu').then(m => m.Menu)},
   {path: 'table/:tableGuid', loadComponent: () => import('./table/table').then(m => m.Table)},
+  {path: 'table/:tableGuid/menu', loadComponent: () => import('./table/table-menu/table-menu').then(m => m.TableMenu)},
   {path: '**', redirectTo: 'home'},
 ];

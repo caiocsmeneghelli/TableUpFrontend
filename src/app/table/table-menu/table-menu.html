@@ -1,0 +1,82 @@
+<main class="table-menu">
+  <header class="table-menu__header">
+    <a class="table-menu__back" routerLink=".." aria-label="Voltar">‹</a>
+    <div>
+      <h1 class="table-menu__title">Cardápio</h1>
+      @if (table(); as table) {
+        <p class="table-menu__subtitle">{{ table.restaurantName }} · Mesa {{ table.tableNumber }}</p>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="table-menu__message">Carregando...</p>
+  } @else if (error()) {
+    <p class="table-menu__message table-menu__message--error">{{ error() }}</p>
+  } @else {
+    <div class="table-menu__categories">
+      @for (category of categories(); track category.guid) {
+        <section class="category" [class.category--expanded]="isExpanded(category.guid)">
+          <button
+            class="category__toggle"
+            type="button"
+            (click)="toggleCategory(category.guid)"
+            [attr.aria-expanded]="isExpanded(category.guid)"
+          >
+            <span class="category__name">{{ category.name }}</span>
+            <span class="category__count">{{ category.items.length }}</span>
+            <span class="category__icon" aria-hidden="true">›</span>
+          </button>
+
+          @if (isExpanded(category.guid)) {
+            <ul class="category__items">
+              @for (item of category.items; track item.guid) {
+                <li class="item">
+                  <div class="item__main">
+                    <span class="item__name">{{ item.name }}</span>
+                    <span class="item__price">{{ item.value | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+                  </div>
+                  @if (item.description) {
+                    <p class="item__description">{{ item.description }}</p>
+                  }
+
+                  @if (isAdding(item)) {
+                    <div class="add-panel">
+                      <div class="add-panel__row">
+                        <div class="quantity" role="group" aria-label="Quantidade">
+                          <button
+                            class="quantity__button"
+                            type="button"
+                            (click)="changeQuantity(-1)"
+                            [disabled]="quantity() <= 1"
+                            aria-label="Diminuir quantidade"
+                          >−</button>
+                          <span class="quantity__value" aria-live="polite">{{ quantity() }}</span>
+                          <button
+                            class="quantity__button"
+                            type="button"
+                            (click)="changeQuantity(1)"
+                            aria-label="Aumentar quantidade"
+                          >+</button>
+                        </div>
+                        <span class="add-panel__total">{{ addingTotal() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+                      </div>
+                      <div class="add-panel__actions">
+                        <button class="add-panel__cancel" type="button" (click)="cancelAdding()">Cancelar</button>
+                        <button class="add-panel__confirm" type="button" (click)="confirmAdding()">Confirmar</button>
+                      </div>
+                    </div>
+                  } @else {
+                    <button class="item__add" type="button" (click)="startAdding(item)">+ Adicionar</button>
+                  }
+                </li>
+              }
+            </ul>
+          }
+        </section>
+      } @empty {
+        <p class="table-menu__message">Nenhum item disponível no cardápio.</p>
+      }
+    </div>
+  }
+</main>
