@@ -1,0 +1,25 @@
+<main class="table-menu">
+  <header class="table-menu__header">
+    <a class="table-menu__back" routerLink=".." aria-label="Voltar">‹</a>
+    <div>
+      <h1 class="table-menu__title">Cardápio</h1>
+      @if (table(); as table) {
+        <p class="table-menu__subtitle">{{ table.restaurantName }} · Mesa {{ table.tableNumber }}</p>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="table-menu__message">Carregando...</p>
+  } @else if (error()) {
+    <p class="table-menu__message table-menu__message--error">{{ error() }}</p>
+  } @else {
+    <ul class="table-menu__categories">
+      @for (category of categories(); track category.guid) {
+        <li class="table-menu__category">{{ category.name }}</li>
+      } @empty {
+        <li class="table-menu__message">Nenhuma categoria disponível.</li>
+      }
+    </ul>
+  }
+</main>
