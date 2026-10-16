@@ -1,0 +1,18 @@
+<main class="table">
+  <header class="table__header">
+    <p class="table__greeting">Bem-vindo!</p>
+    <h1 class="table__title">O que deseja fazer?</h1>
+  </header>
+
+  <nav class="table__actions">
+    <a class="table__action table__action--primary" routerLink="/menu" [queryParams]="{ table: tableGuid() }">
+      <span class="table__action-icon" aria-hidden="true">🍽️</span>
+      <span class="table__action-label">Cardápio</span>
+    </a>
+
+    <button class="table__action" type="button">
+      <span class="table__action-icon" aria-hidden="true">🧾</span>
+      <span class="table__action-label">Conta</span>
+    </button>
+  </nav>
+</main>
