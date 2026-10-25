@@ -1,0 +1,73 @@
+<div class="order-bill-list">
+  <div class="order-bill-list__header">
+    <h2 class="order-bill-list__title">Contas do dia</h2>
+    <button class="order-bill-list__refresh" type="button" (click)="load()" [disabled]="loading()">Atualizar</button>
+  </div>
+
+  <input
+    class="order-bill-list__filter"
+    type="search"
+    placeholder="Filtrar por mesa, restaurante ou status"
+    [ngModel]="filter()"
+    (ngModelChange)="filter.set($event)"
+  />
+
+  @if (error()) {
+    <p class="order-bill-list__error">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else {
+    <div class="order-bill-list__table-wrapper">
+      <table class="order-bill-list__table">
+        <thead>
+          <tr>
+            <th class="order-bill-list__col-actions"></th>
+            <th>Mesa</th>
+            <th>Restaurante</th>
+            <th>Atualizada em</th>
+            <th>Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (bill of filteredOrderBills(); track bill.guidOrderBill) {
+            <tr>
+              <td class="order-bill-list__actions">
+                @switch (bill.statusOrderBill) {
+                  @case (Status.Opened) {
+                    <button type="button" (click)="changeStatus(bill, 'close')" [disabled]="pendingGuid()">Fechar</button>
+                    <button type="button" (click)="changeStatus(bill, 'cancel')" [disabled]="pendingGuid()">Cancelar</button>
+                  }
+                  @case (Status.Closed) {
+                    <button
+                      class="order-bill-list__pay"
+                      type="button"
+                      (click)="changeStatus(bill, 'pay')"
+                      [disabled]="pendingGuid()"
+                    >Confirmar pago</button>
+                    <button type="button" (click)="changeStatus(bill, 'cancel')" [disabled]="pendingGuid()">Cancelar</button>
+                  }
+                }
+              </td>
+              <td>Mesa {{ bill.tableNumber }}</td>
+              <td>{{ bill.restaurantName }}</td>
+              <td>{{ bill.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <span class="order-bill-list__status order-bill-list__status--{{ bill.statusOrderBill }}">
+                  {{ statusLabel(bill.statusOrderBill) }}
+                </span>
+              </td>
+              <td>{{ bill.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">{{ orderBills().length ? 'Nenhuma conta encontrada para o filtro.' : 'Nenhuma conta hoje.' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

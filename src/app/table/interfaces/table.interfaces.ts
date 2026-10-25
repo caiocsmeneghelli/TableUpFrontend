@@ -31,6 +31,7 @@ export enum OrderBillStatus {
   Opened = 1,
   Closed = 2,
   Canceled = 3,
+  Paid = 4,
 }
 
 export enum OrderItemStatus {

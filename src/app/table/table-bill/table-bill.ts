@@ -11,6 +11,7 @@ const BILL_STATUS_LABELS: Record<OrderBillStatus, string> = {
   [OrderBillStatus.Opened]: 'Conta aberta',
   [OrderBillStatus.Closed]: 'Conta fechada',
   [OrderBillStatus.Canceled]: 'Conta cancelada',
+  [OrderBillStatus.Paid]: 'Conta paga',
 };
 
 const ITEM_STATUS_LABELS: Record<OrderItemStatus, string> = {
