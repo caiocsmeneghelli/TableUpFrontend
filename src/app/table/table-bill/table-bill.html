@@ -40,6 +40,7 @@
             <span
               class="bill-item__status"
               [class.bill-item__status--done]="item.statusOrderItem === OrderItemStatus.Completed"
+              [class.bill-item__status--canceled]="item.statusOrderItem === OrderItemStatus.Canceled"
             >{{ itemStatusLabel(item.statusOrderItem) }}</span>
           </div>
         </li>
@@ -51,6 +52,33 @@
     <div class="bill-total">
       <span>Total</span>
       <span>{{ bill.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+    </div>
+
+    <section class="bill-close">
+      @if (confirmingClose()) {
+        <p class="bill-close__text">
+          Deseja finalizar a conta?
+          @if (pendingCount()) {
+            {{ pendingCount() === 1 ? 'O item em preparo será cancelado.' : 'Os ' + pendingCount() + ' itens em preparo serão cancelados.' }}
+          }
+        </p>
+        @if (closeError()) {
+          <p class="bill-close__error" role="alert">{{ closeError() }}</p>
+        }
+        <div class="bill-close__actions">
+          <button class="bill-close__cancel" type="button" (click)="confirmingClose.set(false)" [disabled]="closing()">Voltar</button>
+          <button class="bill-close__confirm" type="button" (click)="closeBill()" [disabled]="closing()">
+            {{ closing() ? 'Finalizando...' : 'Finalizar' }}
+          </button>
+        </div>
+      } @else {
+        <button class="bill-close__confirm" type="button" (click)="confirmingClose.set(true)">Finalizar conta</button>
+      }
+    </section>
+  } @else if (closedTotal() !== null) {
+    <div class="table-bill__message">
+      <p class="table-bill__done">Conta finalizada!</p>
+      Total: {{ closedTotal() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
     </div>
   } @else {
     <p class="table-bill__message">Não há conta aberta para esta mesa.</p>

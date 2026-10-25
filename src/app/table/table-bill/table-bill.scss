@@ -156,6 +156,66 @@
   font-weight: 700;
 }
 
+.bill-item__status--canceled {
+  background: #f1f1f1;
+  color: #777;
+}
+
+.bill-close {
+  margin: 1rem;
+}
+
+.bill-close__text,
+.bill-close__error {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.bill-close__error {
+  color: #b00020;
+}
+
+.bill-close__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bill-close__cancel,
+.bill-close__confirm {
+  flex: 1;
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid #222;
+  border-radius: 0.75rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bill-close__cancel {
+  background: #fff;
+  color: #222;
+}
+
+.bill-close__confirm {
+  background: #222;
+  color: #fff;
+}
+
+.bill-close__cancel:disabled,
+.bill-close__confirm:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.table-bill__done {
+  margin: 0 0 0.5rem;
+  color: #222;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
 .table-bill__message {
   margin: 0;
   padding: 2rem 1rem;

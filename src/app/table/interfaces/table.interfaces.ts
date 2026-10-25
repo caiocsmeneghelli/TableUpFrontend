@@ -36,6 +36,7 @@ export enum OrderBillStatus {
 export enum OrderItemStatus {
   Pending = 1,
   Completed = 2,
+  Canceled = 3,
 }
 
 export interface OrderBillItem {

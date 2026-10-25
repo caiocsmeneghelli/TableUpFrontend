@@ -15,6 +15,11 @@ export class OrderBillService {
     return this.http.get<OrderBill | null>(`${this.baseUrl}/${tableGuid}/order-bills`);
   }
 
+  // Finaliza a conta; os itens ainda em preparo são cancelados pelo backend
+  close(orderBillGuid: string): Observable<unknown> {
+    return this.http.put(`${environment.apiUrl}/api/order-bills/${orderBillGuid}/close`, {});
+  }
+
   // Adiciona os itens à comanda ativa da mesa; o backend abre uma comanda nova se não houver
   addItems(tableNumber: string, restaurantGuid: string, items: CartItem[]): Observable<unknown> {
     return this.http.put(`${this.baseUrl}/${encodeURIComponent(tableNumber)}/order-bills/items`, {
