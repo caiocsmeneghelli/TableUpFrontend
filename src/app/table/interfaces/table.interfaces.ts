@@ -18,3 +18,10 @@ export interface MenuCategoryWithItems {
   name: string;
   items: MenuCategoryItem[];
 }
+
+export interface CartItem {
+  menuItemGuid: string;
+  name: string;
+  value: number;
+  quantity: number;
+}

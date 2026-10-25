@@ -1,4 +1,4 @@
-<main class="table-menu">
+<main class="table-menu" [class.table-menu--with-cart]="cart.count() > 0">
   <header class="table-menu__header">
     <a class="table-menu__back" routerLink=".." aria-label="Voltar">‹</a>
     <div>
@@ -78,5 +78,15 @@
         <p class="table-menu__message">Nenhum item disponível no cardápio.</p>
       }
     </div>
+
+    @if (cart.count() > 0) {
+      <footer class="cart-bar">
+        <a class="cart-bar__link" routerLink="../cart">
+          <span class="cart-bar__count">{{ cart.count() }}</span>
+          <span class="cart-bar__label">Ver carrinho</span>
+          <span class="cart-bar__total">{{ cart.total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+        </a>
+      </footer>
+    }
   }
 </main>

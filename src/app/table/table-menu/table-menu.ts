@@ -3,6 +3,7 @@ import { Component, computed, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { switchMap, tap } from 'rxjs';
 import { MenuCategoryItem, MenuCategoryWithItems, TableSummary } from '../interfaces/table.interfaces';
+import { CartService } from '../services/cart.service';
 import { MenuCategoryService } from '../services/menu-category.service';
 import { TableService } from '../services/table.service';
 
@@ -28,9 +29,12 @@ export class TableMenu implements OnInit {
   constructor(
     private tableService: TableService,
     private menuCategoryService: MenuCategoryService,
+    protected cart: CartService,
   ) {}
 
   ngOnInit() {
+    this.cart.load(this.tableToken());
+
     this.tableService
       .getByToken(this.tableToken())
       .pipe(
@@ -81,7 +85,10 @@ export class TableMenu implements OnInit {
   }
 
   confirmAdding() {
-    // TODO: enviar o item para o pedido da mesa
+    const item = this.addingItem();
+    if (item) {
+      this.cart.add(item, this.quantity());
+    }
     this.addingItem.set(null);
   }
 }

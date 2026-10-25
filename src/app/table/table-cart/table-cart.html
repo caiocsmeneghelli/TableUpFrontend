@@ -1,0 +1,62 @@
+<main class="table-cart" [class.table-cart--with-action]="cart.count() > 0 && !ordered()">
+  <header class="table-cart__header">
+    <a class="table-cart__back" routerLink="../menu" aria-label="Voltar ao cardápio">‹</a>
+    <div>
+      <h1 class="table-cart__title">Carrinho</h1>
+      @if (table(); as table) {
+        <p class="table-cart__subtitle">{{ table.restaurantName }} · Mesa {{ table.tableNumber }}</p>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="table-cart__message">Carregando...</p>
+  } @else if (error()) {
+    <p class="table-cart__message table-cart__message--error">{{ error() }}</p>
+  } @else if (ordered()) {
+    <div class="table-cart__done">
+      <p class="table-cart__done-title">Pedido enviado!</p>
+      <p class="table-cart__message">Seu pedido foi recebido e já está sendo preparado.</p>
+      <a class="table-cart__menu-link" routerLink="../menu">Voltar ao cardápio</a>
+    </div>
+  } @else if (!cart.count()) {
+    <div class="table-cart__done">
+      <p class="table-cart__message">Seu carrinho está vazio.</p>
+      <a class="table-cart__menu-link" routerLink="../menu">Ver cardápio</a>
+    </div>
+  } @else {
+    <ul class="cart-items">
+      @for (item of cart.items(); track item.menuItemGuid) {
+        <li class="cart-item">
+          <div class="cart-item__main">
+            <span class="cart-item__name">{{ item.quantity }}× {{ item.name }}</span>
+            <span class="cart-item__price">{{ item.quantity * item.value | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+          </div>
+          <div class="cart-item__meta">
+            <span class="cart-item__unit">{{ item.value | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }} cada</span>
+            <button
+              class="cart-item__remove"
+              type="button"
+              (click)="removeItem(item.menuItemGuid)"
+              [disabled]="submitting()"
+            >Remover</button>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <div class="table-cart__summary">
+      <span>Total</span>
+      <span class="table-cart__total">{{ cart.total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+    </div>
+
+    <footer class="order-bar">
+      @if (submitError()) {
+        <p class="order-bar__error" role="alert">{{ submitError() }}</p>
+      }
+      <button class="order-bar__button" type="button" (click)="placeOrder()" [disabled]="submitting()">
+        {{ submitting() ? 'Enviando...' : 'Realizar pedido' }}
+      </button>
+    </footer>
+  }
+</main>

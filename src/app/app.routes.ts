@@ -9,5 +9,6 @@ export const routes: Routes = [
   {path: 'menu', loadComponent: () => import('./menu/menu').then(m => m.Menu)},
   {path: 'table/:tableToken', loadComponent: () => import('./table/table').then(m => m.Table)},
   {path: 'table/:tableToken/menu', loadComponent: () => import('./table/table-menu/table-menu').then(m => m.TableMenu)},
+  {path: 'table/:tableToken/cart', loadComponent: () => import('./table/table-cart/table-cart').then(m => m.TableCart)},
   {path: '**', redirectTo: 'home'},
 ];
