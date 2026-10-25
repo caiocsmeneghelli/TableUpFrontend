@@ -15,12 +15,12 @@ export class TableService {
 
   // Reaproveita a mesa já carregada (memória ou sessionStorage) para evitar uma chamada extra
   // quando o cliente navega entre as telas da mesa ou recarrega a página.
-  getByGuid(guid: string): Observable<TableSummary> {
-    if (this.current && this.current.tableGuid.toLowerCase() === guid.toLowerCase()) {
+  getByToken(token: string): Observable<TableSummary> {
+    if (this.current && this.current.tableToken?.toUpperCase() === token.toUpperCase()) {
       return of(this.current);
     }
 
-    return this.http.get<TableSummary>(`${this.baseUrl}/${guid}`).pipe(
+    return this.http.get<TableSummary>(`${this.baseUrl}/${encodeURIComponent(token)}`).pipe(
       tap((table) => {
         this.current = table;
         this.writeStorage(table);

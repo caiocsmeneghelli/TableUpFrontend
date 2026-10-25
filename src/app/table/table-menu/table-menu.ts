@@ -13,7 +13,7 @@ import { TableService } from '../services/table.service';
   styleUrl: './table-menu.scss',
 })
 export class TableMenu implements OnInit {
-  tableGuid = input.required<string>();
+  tableToken = input.required<string>();
 
   table = signal<TableSummary | null>(null);
   categories = signal<MenuCategoryWithItems[]>([]);
@@ -32,7 +32,7 @@ export class TableMenu implements OnInit {
 
   ngOnInit() {
     this.tableService
-      .getByGuid(this.tableGuid())
+      .getByToken(this.tableToken())
       .pipe(
         tap((table) => this.table.set(table)),
         switchMap((table) => this.menuCategoryService.getMenuByRestaurant(table.restaurantGuid)),

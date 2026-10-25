@@ -1,5 +1,6 @@
 export interface TableSummary {
   tableGuid: string;
+  tableToken: string;
   tableNumber: string;
   restaurantGuid: string;
   restaurantName: string;

@@ -10,7 +10,7 @@ import { TableService } from './services/table.service';
   styleUrl: './table.scss',
 })
 export class Table implements OnInit {
-  tableGuid = input.required<string>();
+  tableToken = input.required<string>();
 
   table = signal<TableSummary | null>(null);
   loading = signal(true);
@@ -19,7 +19,7 @@ export class Table implements OnInit {
   constructor(private tableService: TableService) {}
 
   ngOnInit() {
-    this.tableService.getByGuid(this.tableGuid()).subscribe({
+    this.tableService.getByToken(this.tableToken()).subscribe({
       next: (table) => {
         this.table.set(table);
         this.loading.set(false);
