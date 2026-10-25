@@ -1,0 +1,58 @@
+<main class="table-bill">
+  <header class="table-bill__header">
+    <a class="table-bill__back" routerLink=".." aria-label="Voltar">‹</a>
+    <div>
+      <h1 class="table-bill__title">Conta</h1>
+      @if (table(); as table) {
+        <p class="table-bill__subtitle">{{ table.restaurantName }} · Mesa {{ table.tableNumber }}</p>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="table-bill__message">Carregando...</p>
+  } @else if (error()) {
+    <p class="table-bill__message table-bill__message--error">{{ error() }}</p>
+  } @else if (orderBill(); as bill) {
+    <section class="bill-status">
+      <span class="bill-status__badge">{{ billStatusLabel(bill.statusOrderBill) }}</span>
+      <p class="bill-status__text">
+        @if (pendingCount()) {
+          {{ pendingCount() }} {{ pendingCount() === 1 ? 'item em preparo' : 'itens em preparo' }}
+        } @else {
+          Todos os itens foram entregues
+        }
+      </p>
+      <button class="bill-status__refresh" type="button" (click)="refresh()" [disabled]="refreshing()">
+        {{ refreshing() ? 'Atualizando...' : 'Atualizar' }}
+      </button>
+    </section>
+
+    <ul class="bill-items">
+      @for (item of bill.items; track item.guid) {
+        <li class="bill-item">
+          <div class="bill-item__row">
+            <span class="bill-item__name">{{ item.quantity }}× {{ item.itemMenuName }}</span>
+            <span class="bill-item__price">{{ item.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+          </div>
+          <div class="bill-item__row">
+            <span class="bill-item__time">Pedido às {{ item.createdAt | date: 'HH:mm' }}</span>
+            <span
+              class="bill-item__status"
+              [class.bill-item__status--done]="item.statusOrderItem === OrderItemStatus.Completed"
+            >{{ itemStatusLabel(item.statusOrderItem) }}</span>
+          </div>
+        </li>
+      } @empty {
+        <li class="bill-item bill-item--empty">Nenhum item na conta ainda.</li>
+      }
+    </ul>
+
+    <div class="bill-total">
+      <span>Total</span>
+      <span>{{ bill.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+    </div>
+  } @else {
+    <p class="table-bill__message">Não há conta aberta para esta mesa.</p>
+  }
+</main>

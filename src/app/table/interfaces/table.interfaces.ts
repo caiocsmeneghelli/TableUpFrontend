@@ -25,3 +25,35 @@ export interface CartItem {
   value: number;
   quantity: number;
 }
+
+// Espelham os enums EStatusOrderBill / EStatusOrderItem do backend
+export enum OrderBillStatus {
+  Opened = 1,
+  Closed = 2,
+  Canceled = 3,
+}
+
+export enum OrderItemStatus {
+  Pending = 1,
+  Completed = 2,
+}
+
+export interface OrderBillItem {
+  guid: string;
+  quantity: number;
+  guidItemMenu: string;
+  itemMenuName: string;
+  unitValue: number;
+  total: number;
+  statusOrderItem: OrderItemStatus;
+  createdAt: string;
+}
+
+export interface OrderBill {
+  guidOrderBill: string;
+  tableNumber: string;
+  createdAt: string;
+  statusOrderBill: OrderBillStatus;
+  total: number;
+  items: OrderBillItem[];
+}

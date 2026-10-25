@@ -2,9 +2,10 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, computed, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { switchMap, tap } from 'rxjs';
-import { MenuCategoryItem, MenuCategoryWithItems, TableSummary } from '../interfaces/table.interfaces';
+import { MenuCategoryItem, MenuCategoryWithItems, OrderBill, TableSummary } from '../interfaces/table.interfaces';
 import { CartService } from '../services/cart.service';
 import { MenuCategoryService } from '../services/menu-category.service';
+import { OrderBillService } from '../services/order-bill.service';
 import { TableService } from '../services/table.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class TableMenu implements OnInit {
   expandedCategories = signal(new Set<string>());
   loading = signal(true);
   error = signal('');
+  orderBill = signal<OrderBill | null>(null);
 
   addingItem = signal<MenuCategoryItem | null>(null);
   quantity = signal(1);
@@ -29,6 +31,7 @@ export class TableMenu implements OnInit {
   constructor(
     private tableService: TableService,
     private menuCategoryService: MenuCategoryService,
+    private orderBillService: OrderBillService,
     protected cart: CartService,
   ) {}
 
@@ -38,7 +41,10 @@ export class TableMenu implements OnInit {
     this.tableService
       .getByToken(this.tableToken())
       .pipe(
-        tap((table) => this.table.set(table)),
+        tap((table) => {
+          this.table.set(table);
+          this.loadOrderBill(table.tableGuid);
+        }),
         switchMap((table) => this.menuCategoryService.getMenuByRestaurant(table.restaurantGuid)),
       )
       .subscribe({
@@ -51,6 +57,14 @@ export class TableMenu implements OnInit {
           this.loading.set(false);
         },
       });
+  }
+
+  // Sem conta ativa (ou se a consulta falhar) o atalho da conta simplesmente não aparece
+  private loadOrderBill(tableGuid: string) {
+    this.orderBillService.getActiveByTable(tableGuid).subscribe({
+      next: (orderBill) => this.orderBill.set(orderBill),
+      error: () => this.orderBill.set(null),
+    });
   }
 
   toggleCategory(categoryGuid: string) {

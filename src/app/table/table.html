@@ -18,10 +18,12 @@
         <span class="table__action-label">Cardápio</span>
       </a>
 
-      <button class="table__action" type="button">
-        <span class="table__action-icon" aria-hidden="true">🧾</span>
-        <span class="table__action-label">Conta</span>
-      </button>
+      @if (orderBill()) {
+        <a class="table__action" routerLink="bill">
+          <span class="table__action-icon" aria-hidden="true">🧾</span>
+          <span class="table__action-label">Conta</span>
+        </a>
+      }
     </nav>
   }
 </main>

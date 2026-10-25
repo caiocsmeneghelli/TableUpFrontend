@@ -7,6 +7,9 @@
         <p class="table-menu__subtitle">{{ table.restaurantName }} · Mesa {{ table.tableNumber }}</p>
       }
     </div>
+    @if (orderBill()) {
+      <a class="table-menu__bill" routerLink="../bill" aria-label="Ver conta">🧾 Conta</a>
+    }
   </header>
 
   @if (loading()) {
