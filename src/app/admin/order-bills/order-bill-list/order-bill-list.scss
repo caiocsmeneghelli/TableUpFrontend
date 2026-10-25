@@ -98,6 +98,16 @@
   }
 }
 
+.order-bill-list__table-link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #1d4f99;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .order-bill-list__status {
   padding: 0.15rem 0.55rem;
   border-radius: 999px;

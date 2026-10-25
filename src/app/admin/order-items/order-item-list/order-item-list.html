@@ -1,0 +1,79 @@
+<div class="order-item-list">
+  <div class="order-item-list__header">
+    <div>
+      <h2 class="order-item-list__title">Itens de Conta</h2>
+      @if (orderBill(); as bill) {
+        <p class="order-item-list__subtitle">Mesa {{ bill.tableNumber }} · {{ bill.restaurantName }}</p>
+      }
+    </div>
+    @if (orderBillGuid()) {
+      <button class="order-item-list__refresh" type="button" (click)="load()" [disabled]="loading()">Atualizar</button>
+    }
+  </div>
+
+  @if (error()) {
+    <p class="order-item-list__error">{{ error() }}</p>
+  }
+
+  @if (!orderBillGuid()) {
+    <p>Selecione uma conta na aba Contas clicando no nome da mesa.</p>
+  } @else if (loading() && !orderBill()) {
+    <p>Carregando...</p>
+  } @else if (orderBill(); as bill) {
+    <div class="order-item-list__table-wrapper">
+      <table class="order-item-list__table">
+        <thead>
+          <tr>
+            <th class="order-item-list__col-actions"></th>
+            <th>Pedido</th>
+            <th>Qtd.</th>
+            <th>Valor</th>
+            <th>Pedido em</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of bill.items; track item.guid) {
+            <tr>
+              <td class="order-item-list__actions">
+                @switch (item.statusOrderItem) {
+                  @case (Status.Pending) {
+                    <button
+                      class="order-item-list__complete"
+                      type="button"
+                      (click)="changeStatus(item, 'complete')"
+                      [disabled]="pendingGuid()"
+                    >Completar</button>
+                    <button type="button" (click)="changeStatus(item, 'cancel')" [disabled]="pendingGuid()">Cancelar</button>
+                  }
+                  @case (Status.Completed) {
+                    <button type="button" (click)="changeStatus(item, 'cancel')" [disabled]="pendingGuid()">Cancelar</button>
+                  }
+                }
+              </td>
+              <td>{{ item.itemMenuName }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+              <td>{{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <span class="order-item-list__status order-item-list__status--{{ item.statusOrderItem }}">
+                  {{ statusLabel(item.statusOrderItem) }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">Nenhum item nesta conta.</td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Total da conta</td>
+            <td colspan="3">{{ bill.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  }
+</div>

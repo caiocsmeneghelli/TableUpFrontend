@@ -51,7 +51,11 @@
                   }
                 }
               </td>
-              <td>Mesa {{ bill.tableNumber }}</td>
+              <td>
+                <button class="order-bill-list__table-link" type="button" (click)="openItems.emit(bill)">
+                  Mesa {{ bill.tableNumber }}
+                </button>
+              </td>
               <td>{{ bill.restaurantName }}</td>
               <td>{{ bill.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
               <td>

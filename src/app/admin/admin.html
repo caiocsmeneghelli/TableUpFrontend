@@ -37,7 +37,10 @@
         <app-table-list />
       }
       @case ('order-bills') {
-        <app-order-bill-list />
+        <app-order-bill-list (openItems)="openOrderBillItems($event)" />
+      }
+      @case ('order-items') {
+        <app-order-item-list [orderBillGuid]="selectedOrderBillGuid()" />
       }
       @default {
         <p>Selecione uma entidade para gerenciar.</p>

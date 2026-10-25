@@ -1,6 +1,6 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { matchesSearch } from '../../../core/utils/search';
 import { OrderBillAdmin, OrderBillAdminAction, OrderBillAdminStatus } from '../interfaces/order-bill-admin.interfaces';
@@ -39,6 +39,9 @@ export class OrderBillList implements OnInit {
   );
 
   readonly Status = OrderBillAdminStatus;
+
+  // Pede ao admin para abrir a aba de itens desta conta
+  openItems = output<OrderBillAdmin>();
 
   constructor(private orderBillAdminService: OrderBillAdminService) {}
 
