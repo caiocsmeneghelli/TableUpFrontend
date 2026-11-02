@@ -4,9 +4,9 @@
 
 <div class="home__restaurants">
   @for (restaurant of restaurants(); track restaurant.id) {
-    <article class="restaurant-card">
+    <a class="restaurant-card" [routerLink]="['/restaurant', restaurant.id]">
       <h2 class="restaurant-card__name">{{ restaurant.name }}</h2>
       <p class="restaurant-card__description">{{ restaurant.description }}</p>
-    </article>
+    </a>
   }
 </div>

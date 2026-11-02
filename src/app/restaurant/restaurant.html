@@ -1,0 +1,117 @@
+<main class="restaurant">
+  <a class="restaurant__back" routerLink="/home" aria-label="Voltar para restaurantes">‹</a>
+
+  @if (loading()) {
+    <div class="hero hero--skeleton" aria-busy="true"></div>
+  } @else if (error()) {
+    <div class="restaurant__message restaurant__message--error">
+      <p>{{ error() }}</p>
+      <a class="restaurant__link" routerLink="/home">Ver todos os restaurantes</a>
+    </div>
+  } @else if (restaurant(); as restaurant) {
+    <section class="hero">
+      @if (restaurant.imageUrl) {
+        <img class="hero__image" [src]="restaurant.imageUrl" [alt]="restaurant.name" />
+      } @else {
+        <div class="hero__placeholder" aria-hidden="true">{{ initial() }}</div>
+      }
+      <div class="hero__overlay"></div>
+
+      <div class="hero__content">
+        <span class="hero__badge">Restaurante</span>
+        <h1 class="hero__title">{{ restaurant.name }}</h1>
+        @if (restaurant.description) {
+          <p class="hero__description">{{ restaurant.description }}</p>
+        }
+
+        <div class="hero__actions">
+          <button
+            class="hero__menu-button"
+            type="button"
+            (click)="toggleMenu()"
+            [attr.aria-expanded]="menuOpen()"
+            aria-controls="restaurant-menu"
+          >
+            <span aria-hidden="true">📖</span>
+            {{ menuOpen() ? 'Ocultar cardápio' : 'Ver cardápio' }}
+          </button>
+          @if (restaurant.email) {
+            <a class="hero__contact" [href]="'mailto:' + restaurant.email">Contato</a>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <div class="about__card">
+        <span class="about__label">Sobre</span>
+        <p class="about__text">
+          {{ restaurant.description || 'Conheça nosso cardápio e faça seu pedido direto da mesa.' }}
+        </p>
+      </div>
+      @if (restaurant.email) {
+        <div class="about__card">
+          <span class="about__label">E-mail</span>
+          <a class="about__text about__text--link" [href]="'mailto:' + restaurant.email">{{ restaurant.email }}</a>
+        </div>
+      }
+    </section>
+
+    @if (menuOpen()) {
+      <section class="menu" id="restaurant-menu" #menuSection>
+        <header class="menu__header">
+          <h2 class="menu__title">Cardápio</h2>
+          @if (itemCount()) {
+            <span class="menu__count">{{ itemCount() }} itens</span>
+          }
+        </header>
+
+        @if (menuLoading()) {
+          <div class="menu__skeletons" aria-busy="true">
+            @for (_ of [1, 2, 3]; track $index) {
+              <div class="dish dish--skeleton"></div>
+            }
+          </div>
+        } @else if (menuError()) {
+          <p class="restaurant__message restaurant__message--error">{{ menuError() }}</p>
+        } @else {
+          @if (categories().length > 1) {
+            <nav class="menu__tabs" aria-label="Categorias">
+              @for (category of categories(); track category.guid) {
+                <button
+                  class="menu__tab"
+                  type="button"
+                  [class.menu__tab--active]="activeCategory() === category.guid"
+                  (click)="goToCategory(category.guid)"
+                >
+                  {{ category.name }}
+                </button>
+              }
+            </nav>
+          }
+
+          @for (category of categories(); track category.guid) {
+            <div class="menu__category" [id]="'category-' + category.guid">
+              <h3 class="menu__category-title">{{ category.name }}</h3>
+              <ul class="menu__dishes">
+                @for (item of category.items; track item.guid) {
+                  <li class="dish">
+                    <div class="dish__main">
+                      <h4 class="dish__name">{{ item.name }}</h4>
+                      <p class="dish__description">
+                        {{ item.description || 'Sem descrição.' }}
+                      </p>
+                    </div>
+                    <span class="dish__price">{{ item.value | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+          } @empty {
+            <p class="restaurant__message">Nenhum item disponível no cardápio.</p>
+          }
+        }
+      </section>
+    }
+  }
+</main>

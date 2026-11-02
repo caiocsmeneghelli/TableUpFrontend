@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Restaurant } from '../interfaces/restaurant.interfaces';
 
@@ -12,5 +12,10 @@ export class RestaurantService {
 
   getAll(): Observable<Restaurant[]> {
     return this.http.get<Restaurant[]>(this.baseUrl);
+  }
+
+  // A API ainda não expõe GET por id, então buscamos na lista de ativos
+  getById(id: string): Observable<Restaurant | undefined> {
+    return this.getAll().pipe(map((restaurants) => restaurants.find((r) => r.id === id)));
   }
 }
