@@ -1,6 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, computed, ElementRef, input, OnInit, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { resolveImageUrl } from '../core/utils/image-url';
 import { Restaurant } from '../home/interfaces/restaurant.interfaces';
 import { RestaurantService } from '../home/services/restaurant.service';
 import { MenuCategoryWithItems } from '../table/interfaces/table.interfaces';
@@ -28,6 +29,7 @@ export class RestaurantPage implements OnInit {
   itemCount = computed(() =>
     this.categories().reduce((total, category) => total + category.items.length, 0),
   );
+  imageUrl = computed(() => resolveImageUrl(this.restaurant()?.imageUrl));
   initial = computed(() => this.restaurant()?.name.charAt(0).toUpperCase() ?? '');
 
   private menuSection = viewChild<ElementRef<HTMLElement>>('menuSection');

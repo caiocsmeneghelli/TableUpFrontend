@@ -10,8 +10,8 @@
     </div>
   } @else if (restaurant(); as restaurant) {
     <section class="hero">
-      @if (restaurant.imageUrl) {
-        <img class="hero__image" [src]="restaurant.imageUrl" [alt]="restaurant.name" />
+      @if (imageUrl()) {
+        <img class="hero__image" [src]="imageUrl()" [alt]="restaurant.name" />
       } @else {
         <div class="hero__placeholder" aria-hidden="true">{{ initial() }}</div>
       }

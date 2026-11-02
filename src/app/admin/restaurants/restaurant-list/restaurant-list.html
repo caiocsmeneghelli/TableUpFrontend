@@ -16,6 +16,7 @@
         <thead>
           <tr>
             <th class="restaurant-list__col-actions"></th>
+            <th class="restaurant-list__col-image">Imagem</th>
             <th class="restaurant-list__col-name">Nome</th>
             <th class="restaurant-list__col-slug">Slug</th>
             <th class="restaurant-list__col-email">E-mail</th>
@@ -29,6 +30,13 @@
                 <button type="button" (click)="startEdit(restaurant)">Editar</button>
                 <button type="button" (click)="remove(restaurant)">Excluir</button>
               </td>
+              <td>
+                @if (restaurant.imageUrl) {
+                  <img class="restaurant-list__thumb" [src]="resolveImageUrl(restaurant.imageUrl)" [alt]="restaurant.name" />
+                } @else {
+                  <span class="restaurant-list__thumb restaurant-list__thumb--empty" aria-label="Sem imagem">—</span>
+                }
+              </td>
               <td>{{ restaurant.name }}</td>
               <td>{{ restaurant.slug }}</td>
               <td>{{ restaurant.email }}</td>
@@ -36,7 +44,7 @@
             </tr>
           } @empty {
             <tr>
-              <td colspan="5">Nenhum restaurante cadastrado.</td>
+              <td colspan="6">Nenhum restaurante cadastrado.</td>
             </tr>
           }
         </tbody>
@@ -48,6 +56,29 @@
     <div class="restaurant-list__overlay" (click)="cancelForm()"></div>
     <form class="restaurant-list__edit" (ngSubmit)="saveForm()" #editRestaurantForm="ngForm">
       <h3>{{ creating() ? 'Novo restaurante' : 'Editar restaurante' }}</h3>
+
+      <span class="restaurant-list__image-label">Imagem</span>
+      <div class="restaurant-list__image">
+        @if (imagePreview()) {
+          <img class="restaurant-list__image-preview" [src]="imagePreview()" alt="Pré-visualização da imagem" />
+        } @else {
+          <div class="restaurant-list__image-preview restaurant-list__image-preview--empty">Sem imagem</div>
+        }
+        <label class="restaurant-list__image-button" for="edit-image">
+          {{ imagePreview() ? 'Trocar imagem' : 'Importar imagem' }}
+        </label>
+        <input
+          id="edit-image"
+          class="restaurant-list__image-input"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="onImageSelected($event)"
+        />
+      </div>
+      <small class="restaurant-list__image-hint">JPG, PNG ou WEBP, até 5 MB.</small>
+      @if (imageError()) {
+        <small class="restaurant-list__image-error">{{ imageError() }}</small>
+      }
 
       <label for="edit-name">Nome</label>
       <input id="edit-name" name="name" type="text" [(ngModel)]="editForm.name" />
